@@ -15,11 +15,9 @@ $data = query("SELECT pengguna.nama, pengguna.idkary,pengguna.jabatan,pengguna.s
 if(isset($_GET['delete-pc']))
 {
     $id_pc = $_GET['delete-pc'];
-    if(deleteDatapc($id_pc)){
-        // echo "<script>alert('Data Berhasil Disimpan.'); window.location='data-pc.php';</script>";
-    }else{
-        // echo "<script>alert('Data Berhasil Disimpan.'); window.location='data-pc.php';</script>";
-    }
+    deleteDatapc($id_pc);
+    echo "<script>alert('Data Berhasil Disimpan.'); window.location='data-pc.php';</script>";
+    
 }
 
 ?>
@@ -95,10 +93,10 @@ if(isset($_GET['delete-pc']))
                                 <td><?= $key['namamerk'] ?></td>
                                 <td><?= $key['namapc'] ?></td>
                                 <td class="table-action">
-                                    <a class="table-action" data-target="#ModalEdit" href="#" data-toggle="tooltip" data-original-title="Edit Users">
+                                    <a class="table-action" data-target="#ModalEdit" href="edit-data-pc.php?edit=<?= $key['idkary'] ?>" data-toggle="tooltip" data-original-title="Edit Users">
                                         <i class="fas fa-user-edit text-primary"></i>
                                     </a>
-                                    <a data-toggle="modal" data-target="#ModalDelete<?= $key['idpc'] ?>" href="#" class="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete Users">
+                                    <a data-toggle="modal" href="#" class="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete Users">
                                         <i class="fas fa-trash text-danger"></i>
                                     </a>
                                 </td>
