@@ -8,6 +8,14 @@ $data_cok = query("SELECT * FROM pengguna
 JOIN pc ON pengguna.idkary = pc.idpengguna 
 JOIN divisi ON pengguna.unitkerja = divisi.id WHERE pengguna.idkary = '$id_kary' AND pc.is_delete = '0' ");
 
+$id_pc = $data_cok[0]['idpc'];
+$data_detail_komputer = query("SELECT rakitan.idrakitan,rakitan.barcode,rakitan.jumlah,komponen.idkategori='1' AS Motherboard, komponen.idkategori='2' AS Processor, komponen.idkategori='3' AS HarDisk, komponen.idkategori='4' AS Memory, komponen.tipe,komponen.spesifikasi,komponen.keterangan, komponen.stats, merk.namamerk, kategori.namakategori 
+FROM rakitan 
+JOIN komponen ON rakitan.idkomponen = komponen.idkomponen 
+LEFT JOIN merk ON komponen.idmerk = merk.idmerk 
+LEFT JOIN kategori ON komponen.idkategori = kategori.idkategori
+WHERE rakitan.idpc = '$id_pc'");
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -159,13 +167,38 @@ JOIN divisi ON pengguna.unitkerja = divisi.id WHERE pengguna.idkary = '$id_kary'
                                 </thead>
                                 <tbody>
                                     <!-- isi table dari script append -->
+                                    <?php foreach($data_detail_komputer as $key) { 
+                                        $komponen = "";
+                                        if($key['Motherboard'] == 1){
+                                            $komponen = "Motherboard";
+                                        }
+                                        else if($key['Processor'] == 1){
+                                            $komponen = "Processor";
+                                        }
+                                        else if($key['Memory'] == 1){
+                                            $komponen = "Memory";
+                                        }
+                                        else if($key['HarDisk'] == 1){
+                                            $komponen = "HarDisk";
+                                        }   
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $komponen ?></td>
+                                            <td><?= $key['namamerk'] ?></td>
+                                            <td><?= $key['tipe'] ?></td>
+                                            <td><?= $key['spesifikasi'] ?></td>
+                                            <td><?= $key['keterangan'] ?></td>
+                                            <td><?= $key['barcode'] ?></td>
+                                            <td><?= $key['jumlah'] ?></td>
+                                        </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Catatan</span>
                                 </div>
-                                <textarea name="catatan" class="form-control"></textarea>
+                                <textarea name="catatan" class="form-control"><?= $data_cok[0]['catatan'] ?></textarea>
                             </div>
                             <p style="color:red; font-size:75%; font-style:italic;"><span style="color:red;">*</span>Apabila nomor barcode tidak ada maka mengikuti barcode komputer.</p>
                         </div>
@@ -207,6 +240,6 @@ include "templates/footer.php";
                 }
             })
         })
-        
+
     });
 </script>
